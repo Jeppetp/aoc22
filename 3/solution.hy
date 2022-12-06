@@ -1,13 +1,28 @@
 ;; open input and remove trailing newline
 (require hyrule [ap-each])
 (with [f (open "input")]
-  (setv input_text (str.strip (f.read)))
+  (setv input_text (map str.strip (f.readlines)))
 )
 
-(defn split_lines [input_string]
-      (str.split input_string "\n" ))
+(defn split_halfway [input_string]
+      (setv halfway (// (len input_string) 2))
+      [(cut input_string None halfway)
+       (cut input_string halfway None)])
 
+(defn intersection [pair]
+      (.intersection (set (get pair 0)) (set (get pair 1))))
+
+(defn priority [char]
+  (if (and (<= 65 (ord char)) (<= (ord char) 90) )
+      (- (ord char) 38)
+      (if (and (<= 97 (ord char)) (<= (ord char) 122) )
+          (- (ord char) 96) 0 )))
+
+(setv chars (map intersection (map split_halfway input_text)))
+(print (list chars))
 (print (split_lines input_text))
+
+
 
 (setv robot_dict
       {"A" 0 "B" 1 "C" 2})
